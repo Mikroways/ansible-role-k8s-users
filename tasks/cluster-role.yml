@@ -1,0 +1,22 @@
+---
+# tasks file for k8s-backup
+
+- name: Create a service account
+  k8s:
+    state: present
+    name: "{{ item.user }}"
+    namespace: "{{ item.namespace }}"
+    api_version: v1
+    kind: ServiceAccount
+  when: item.action == "create"
+  loop: "{{ k8s_rbac_cluster_role }}"
+
+- name: Create a k8s Cluster Role
+  k8s:
+    state: present
+    definition: "{{ lookup('template', role_path  + '/templates/clusterrole-k8s.yaml.j2') }}"
+
+- name: Create a k8s Cluster Role Binding
+  k8s:
+    state: present
+    definition: "{{ lookup('template', role_path + '/templates/clusterrole-binding-k8s.yaml.j2') }}"

@@ -1,0 +1,17 @@
+---
+
+- name: Create cluster role #Cluster scope
+  include_tasks: cluster-role.yml
+  when: k8s_rbac_cluster_role is defined 
+
+- name: Create role #Namespace scope
+  include_tasks: role.yml
+  when: k8s_rbac_role is defined
+
+- name: Delete roles
+  include_tasks: delete-role.yml
+  when: k8s_rbac_role is defined 
+
+- name: Delete cluster roles
+  include_tasks: delete-cluster-role.yml
+  when: k8s_rbac_cluster_role is defined 

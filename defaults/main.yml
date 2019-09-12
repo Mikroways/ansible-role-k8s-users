@@ -1,0 +1,32 @@
+---
+# defaults file for geroafonso.k8s_users
+ansible_python_interpreter: /usr/bin/python3
+k8s_rbac_cluster_role: 
+  - name: test-cluster-role
+    user: cluster-role-user 
+    namespace: default
+    action: delete
+    api_groups:
+      - name:
+          - ""
+          - "extensions"
+          - "apps"
+        resources: 
+          - "*"
+        verbs:
+          - "*"
+k8s_rbac_role: 
+  - name: test-role
+    namespace: testing
+    action: create 
+    user: test-r
+    api_groups:
+      - name:
+          - ""
+          - "extensions"
+          - "apps"
+        resources: 
+          - "pods"
+          - "pods/log"
+        verbs:
+          - "*"

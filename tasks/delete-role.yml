@@ -1,0 +1,34 @@
+---
+
+# Se eliminaran todos los roles especificados en la variable k8s_rbac_role
+#
+- name: Delete service account created for Role
+  k8s:
+    state: absent 
+    name: "{{ item.user }}"
+    namespace: "{{ item.namespace }}"
+    api_version: v1
+    kind: ServiceAccount
+  when: item.action == "delete"
+  loop: "{{ k8s_rbac_role }}"
+
+- name: Delete a k8s role 
+  k8s:
+    name: "{{ item.name }}"
+    namespace: "{{ item.namespace }}"
+    api_version: v1
+    kind: Role
+    state: absent
+  when: item.action == "delete"
+  loop: "{{ k8s_rbac_role }}"
+
+- name: Delete role binding created for Role
+  k8s:
+    state: absent 
+    name: "{{ item.name }}-binding"
+    namespace: "{{ item.namespace }}"
+    kind: RoleBinding
+    api_version: v1
+  when: item.action == "delete"
+  loop: "{{ k8s_rbac_role }}"
+
