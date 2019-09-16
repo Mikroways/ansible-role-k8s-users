@@ -10,22 +10,22 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_cluster_role }}"
+  loop: "{{ user_to_cluster_role }}"
 
-- name: Delete a k8s cluster role 
-  k8s:
-    name: "{{ item.name }}"
-    api_version: v1
-    kind: ClusterRole
-    state: absent
-  when: item.action == "delete"
-  loop: "{{ k8s_rbac_cluster_role }}"
+  #- name: Delete a k8s cluster role 
+  #  k8s:
+  #    name: "{{ item.name }}"
+  #    api_version: v1
+  #    kind: ClusterRole
+  #    state: absent
+  #  when: item.action == "delete"
+  #  loop: "{{ k8s_rbac_cluster_role }}"
 
 - name: Delete cluster role binding created for Cluster Role
   k8s:
     state: absent 
-    name: "{{ item.name }}-binding"
+    name: "{{ item.cluster_role }}-binding-{{ item.user }}"
     kind: ClusterRoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_cluster_role }}"
+  loop: "{{ user_to_cluster_role }}"

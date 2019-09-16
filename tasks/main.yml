@@ -1,17 +1,45 @@
 ---
 
+# Add user to cluster role
+- name: Add User to ClusterRole
+  include_tasks: user-to-cluster-role.yml
+  when: user_to_cluster_role is defined
+
+# Add user to role
+- name: Add User to Role
+  include_tasks: user-to-role.yml
+  when: user_to_role is defined
+
+# Create custom cluster role and add user
 - name: Create cluster role #Cluster scope
   include_tasks: cluster-role.yml
   when: k8s_rbac_cluster_role is defined 
 
+# Create custom role and add user
 - name: Create role #Namespace scope
   include_tasks: role.yml
   when: k8s_rbac_role is defined
 
-- name: Delete roles
+# Delete custom user role
+- name: Delete custom user roles
   include_tasks: delete-role.yml
   when: k8s_rbac_role is defined 
 
+# Delete custom cluster role
+- name: Delete custom cluster roles
+  include_tasks: delete-custom-cluster-role.yml
+  when: k8s_rbac_cluster_role is defined 
+
+# Delete only the role binding for user
+- name: Delete user roles
+  include_tasks: delete-role.yml
+  when: user_to_role is defined 
+
+# Delete only the cluster role biniding for user
 - name: Delete cluster roles
   include_tasks: delete-cluster-role.yml
-  when: k8s_rbac_cluster_role is defined 
+  when: user_to_cluster_role is defined
+
+# Generate kubeconfig file for roles/clusterRoles created  
+- name: Generate kubeconfig files
+  include_tasks: kubeconfig-cluster-role.yml

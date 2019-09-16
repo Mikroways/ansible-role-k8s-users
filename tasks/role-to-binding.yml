@@ -1,0 +1,38 @@
+---
+# tasks file for k8s-backup
+
+- name: Check if Role is defined
+  fail: 
+    msg: "Se debe especificar el ClusterRole mediante la variable 'role'. Valores permitidos: {{ allowed_cluster_roles | join(', ') }}"
+  when: item.role is not defined or item.role not in allowed_cluster_roles
+  loop: "{{ k8s_rbac_role_to_binding }}"
+
+- name: Check if User is defined
+  fail: 
+    msg: "Se debe especificar el usuario para crear el ServiceAccount mediante la variable 'user'. }}"
+  when: item.user is not defined
+  loop: "{{ k8s_rbac_role_to_binding }}"
+
+- name: Check if NameSpace exist
+  k8s:
+    state: present
+    name: "{{ item.namespace }}"
+    api_version: v1
+    kind: Namespace
+  when: item.action == "create"
+  loop: "{{ k8s_rbac_role_to_binding }}"
+ 
+- name: Create a service account
+  k8s:
+    state: present
+    name: "{{ item.user }}"
+    namespace: "{{ item.namespace }}"
+    api_version: v1
+    kind: ServiceAccount
+  when: item.action == "create"
+  loop: "{{ k8s_rbac_role_to_binding }}"
+
+- name: Create a k8s Role Binding
+  k8s:
+    state: present
+    definition: "{{ lookup('template', role_path + '/templates/user-binding-to-role.yaml.j2') }}"

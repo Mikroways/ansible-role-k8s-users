@@ -2,7 +2,7 @@
 
 # Se eliminaran todos los roles especificados en la variable k8s_rbac_role
 #
-- name: Delete service account created for Role
+- name: Delete service account created for Cluster Role
   k8s:
     state: absent 
     name: "{{ item.user }}"
@@ -10,26 +10,22 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
+  loop: "{{ k8s_rbac_cluster_role }}"
 
-  # El rol deberia eliminarse a mano, por cuestiones de seguridad, ya que podria haber otros usuarios asociados al mismo
-  #- name: Delete a k8s role 
+  #- name: Delete a k8s cluster role 
   #  k8s:
   #    name: "{{ item.name }}"
-  #    namespace: "{{ item.namespace }}"
   #    api_version: v1
-  #    kind: Role
+  #    kind: ClusterRole
   #    state: absent
   #  when: item.action == "delete"
-  #  loop: "{{ k8s_rbac_role }}"
+  #  loop: "{{ k8s_rbac_cluster_role }}"
 
-- name: Delete role binding created for Role
+- name: Delete cluster role binding created for Cluster Role
   k8s:
     state: absent 
     name: "{{ item.name }}-binding"
-    namespace: "{{ item.namespace }}"
-    kind: RoleBinding
+    kind: ClusterRoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
-
+  loop: "{{ k8s_rbac_cluster_role }}"

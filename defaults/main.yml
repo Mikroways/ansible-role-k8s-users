@@ -1,32 +1,63 @@
 ---
 # defaults file for geroafonso.k8s_users
-ansible_python_interpreter: /usr/bin/python3
 k8s_rbac_cluster_role: 
   - name: test-cluster-role
     user: cluster-role-user 
     namespace: default
-    action: delete
+    action: create
     api_groups:
       - name:
           - ""
           - "extensions"
           - "apps"
+          - "batch"
         resources: 
           - "*"
         verbs:
           - "*"
-k8s_rbac_role: 
-  - name: test-role
-    namespace: testing
+
+k8s_rbac_role:
+  - name: admin-role-for-jenkins
+    namespace: jenkins-test
+    action: create
+    user: jenkins-user-admin
+    api_groups:
+      - name:
+          - ""
+          - "extensions"
+          - "apps"
+          - "batch"
+        resources: 
+          - "*"
+        verbs:
+          - "*"
+
+# Cluster scope
+user_to_cluster_role:
+  - user: prueba-admin
+    cluster_role: cluster-admin
     action: create 
-    user: test-r
-    api_groups:
-      - name:
-          - ""
-          - "extensions"
-          - "apps"
-        resources: 
-          - "pods"
-          - "pods/log"
-        verbs:
-          - "*"
+    namespace: kube-system 
+  - user: prueba-view
+    cluster_role: view
+    action: create 
+    namespace: kube-system 
+
+# Namespace scope
+user_to_role:
+  - user: user-ro
+    role: view
+    action: create
+    namespace: geronimo-ro
+  - user: user-admin
+    role: admin
+    action: create
+    namespace: geronimo-ro
+
+allowed_cluster_roles:
+  - cluster-admin
+  - view
+
+allowed_roles:
+  - admin
+  - view

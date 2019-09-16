@@ -10,7 +10,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
+  loop: "{{ user_to_role }}"
 
   # El rol deberia eliminarse a mano, por cuestiones de seguridad, ya que podria haber otros usuarios asociados al mismo
   #- name: Delete a k8s role 
@@ -26,10 +26,10 @@
 - name: Delete role binding created for Role
   k8s:
     state: absent 
-    name: "{{ item.name }}-binding"
+    name: "{{ item.role }}-binding-{{ item.user}}"
     namespace: "{{ item.namespace }}"
     kind: RoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
+  loop: "{{ user_to_role }}"
 
