@@ -12,10 +12,69 @@ good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
-Cluster roles:
+
+Por defecto el rol se encuentra deshabilitado:
+* m7s_users_enabled: false
+
+Setear esta varaible a *true* para poder agregar/eliminar usuarios.
+
+* Para crear un usuario setear la variable action con el valor *create*.
+* Para eliminar un usuario setear la variable action con el valor *delete*.
+
+Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_user_to_cluster_role*. El alcance de esta sera a todo el cluster.
+
+ClusterRoles permitidos:
+* cluster-admin
+* admin
+* edit
+* view
+
+Ejemplo:
 
 ```yaml
-k8s_rbac_cluster_role:
+#Cluster scope
+m7s_user_to_cluster_role:
+  - user: prueba-admin
+    cluster_role: cluster-admin
+    action: create
+    namespace: kube-system
+  - user: prueba-view
+    cluster_role: view
+    action: create
+    namespace: kube-system
+```
+
+Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_user_to_cluster_role*. El alcance de este sera solo al namespace indicado.
+
+ClusterRoles permitidos:
+* cluster-admin
+* admin
+* edit
+* view
+
+Ejemplo:
+
+```yaml
+# Namespace scope
+m7s_user_to_role:
+  - user: user-admin-test-view-ns
+    role: view
+    action: create
+    namespace: jenkins
+  - user: user-admin-test-edit-ns
+    role: edit
+    action: create
+    namespace: jenkins
+  - user: user-admin-test-ns
+    role: admin
+    action: create
+    namespace: jenkins
+```
+
+Crear custom Cluster roles:
+
+```yaml
+m7s_rbac_cluster_role:
   - name: test-cluster-role
     user: cluster-role-user
     namespace: default
@@ -31,9 +90,9 @@ k8s_rbac_cluster_role:
           - "*"
 ```
 
-Roles:
+Crear custom Roles:
 ```yaml
-k8s_rbac_role:
+m7s_rbac_role:
   - name: test-role
     namespace: testing
     user: test-r
@@ -50,8 +109,8 @@ k8s_rbac_role:
           - "*"
 ```
 
-- k8s_rbac_role: si esta presente creara Roles.
-- k8s_rbac_cluster_role: si esta presente creara Cluster Roles.
+- k8s_rbac_role: si esta presente creara custom Roles.
+- k8s_rbac_cluster_role: si esta presente creara custom Cluster Roles.
 
 - name: nombre de un Role o Cluster Role
 - namespace: 
