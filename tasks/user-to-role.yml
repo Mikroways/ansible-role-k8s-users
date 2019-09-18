@@ -3,21 +3,21 @@
 
 - name: Check if Role is defined
   fail:
-    msg: "Se debe especificar el ClusterRole existente mediante la variable 'user_to_role.role'."
+    msg: "Se debe especificar el ClusterRole existente mediante la variable 'm7s_user_to_role.role'."
   when: item.role is not defined
-  loop: "{{ user_to_role }}"
+  loop: "{{ m7s_user_to_role }}"
 
 - name: Check for Role type
   fail: 
-    msg: "Valores permitidos para la variable user_to_role.role: {{ allowed_roles | join(', ') }}"
+    msg: "Valores permitidos para la variable user_to_role.role: {{ m7s_allowed_roles | join(', ') }}"
   when: item.role not in allowed_roles
-  loop: "{{ user_to_role }}"
+  loop: "{{ m7s_user_to_role }}"
 
 - name: Check if User is defined
   fail:
-    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'user_to_role.user'."
+    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'm7s_user_to_role.user'."
   when: item.user is not defined
-  loop: "{{ user_to_role }}"
+  loop: "{{ m7s_user_to_role }}"
 
 - name: Create namespace
   k8s:
@@ -27,7 +27,7 @@
     kind: Namespace
     api_version: v1
   when: item.action == "create"
-  loop: "{{ user_to_role }}"
+  loop: "{{ m7s_user_to_role }}"
 
 - name: Create a service account
   k8s:
@@ -37,16 +37,15 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "create"
-  loop: "{{ user_to_role }}"
-
-- name: Create Role
-  k8s:
-    state: present
-    definition: "{{ lookup('template', role_path + '/templates/user-role-k8s.yaml.j2' if item.role == 'admin' else role_path + '/templates/user-role-ro-k8s.yaml.j2') }}"
-  when: item.action == "create"
-  loop: "{{ user_to_role }}"
+  loop: "{{ m7s_user_to_role }}"
 
 - name: User binding to Role
   k8s:
     state: present
-    definition: "{{ lookup('template', role_path + '/templates/binding-user-role.yaml.j2') }}"
+    definition: "{{ lookup('template', role_path + '/templates/user-binding-to-role.yaml.j2') }}"
+  vars:
+    role: "{{ item.role }}"
+    namespace: "{{ item.namespace }}"
+    user: "{{ item.user }}"
+  when: item.action == "create"
+  loop: "{{ m7s_user_to_role }}"

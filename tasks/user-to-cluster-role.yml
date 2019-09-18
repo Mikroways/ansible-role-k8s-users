@@ -3,21 +3,21 @@
 
 - name: Check if ClusterRole is defined
   fail:
-    msg: "Se debe especificar el ClusterRole existente mediante la variable 'user_to_cluster_role.cluster_role'."
+    msg: "Se debe especificar el ClusterRole existente mediante la variable 'm7s_user_to_cluster_role.cluster_role'."
   when: item.cluster_role is not defined
-  loop: "{{ user_to_cluster_role }}"
+  loop: "{{ m7s_user_to_cluster_role }}"
 
 - name: Check if ClusterRole is defined
   fail: 
-    msg: "Valores permitidos para la variable user_to_cluster_role.cluster_role: {{ allowed_cluster_roles | join(', ') }}"
-  when: item.cluster_role not in allowed_cluster_roles
-  loop: "{{ user_to_cluster_role }}"
+    msg: "Valores permitidos para la variable m7s_user_to_cluster_role.cluster_role: {{ m7s_allowed_cluster_roles | join(', ') }}"
+  when: item.cluster_role not in m7s_allowed_cluster_roles
+  loop: "{{ m7s_user_to_cluster_role }}"
 
 - name: Check if User is defined
   fail:
-    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'user_to_cluster_role.user'."
+    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'm7s_user_to_cluster_role.user'."
   when: item.user is not defined
-  loop: "{{ user_to_cluster_role }}"
+  loop: "{{ m7s_user_to_cluster_role }}"
 
 - name: Create a service account
   k8s:
@@ -27,9 +27,15 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "create"
-  loop: "{{ user_to_cluster_role }}"
+  loop: "{{ m7s_user_to_cluster_role }}"
 
 - name: User binding to ClusterRole
   k8s:
     state: present
     definition: "{{ lookup('template', role_path + '/templates/user-binding-to-cluster-role.yaml.j2') }}"
+  vars:
+    cluster_role: "{{ item.cluster_role }}"
+    namespace: "{{ item.namespace }}"
+    user: "{{ item.user }}"
+  when: item.action == "create"
+  loop: "{{ m7s_user_to_cluster_role }}"

@@ -1,24 +1,20 @@
-{% for role in k8s_rbac_role %}
-{% if role.action == "create" %}
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
-  name: {{ role.name }}
-  namespace: {{ role.namespace }}
+  name: {{ role }}
+  namespace: {{ namespace }}
 rules:
-{% for api_groups in role.api_groups %}
+{% for api_group in api_groups %}
   - apiGroups: 
-{% for api in api_groups.name %}
+{% for api in api_group.name %}
     - "{{ api }}"
 {% endfor %}
     resources:
-{% for resource in api_groups.resources %}
+{% for resource in api_group.resources %}
       - "{{ resource }}"
 {% endfor %}
     verbs:
-{% for verb in api_groups.verbs %}
+{% for verb in api_group.verbs %}
       - "{{ verb }}"
 {% endfor %}
-{% endfor %}
-{% endif %}
 {% endfor %}

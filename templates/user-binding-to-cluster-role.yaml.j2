@@ -1,16 +1,13 @@
-{% for role in user_to_cluster_role %}
-{% if role.action == "create" %}
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ role.cluster_role }}-binding-{{role.user}}
+  name: {{ cluster_role }}-binding-{{ user }}
+  namespace: {{ namespace }}
 subjects:
-- kind: ServiceAccount 
-  name: {{ role.user }}
-  namespace: {{ role.namespace }}
+- kind: ServiceAccount
+  name: {{ user }}
+  namespace: {{ namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ role.cluster_role }}
-{% endif %}
-{% endfor %}
+  name: {{ cluster_role }}

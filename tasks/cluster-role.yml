@@ -9,14 +9,27 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "create"
-  loop: "{{ k8s_rbac_cluster_role }}"
+  loop: "{{ m7s_rbac_cluster_role }}"
 
 - name: Create a k8s Cluster Role
   k8s:
     state: present
     definition: "{{ lookup('template', role_path  + '/templates/clusterrole-k8s.yaml.j2') }}"
+  vars:
+    role: "{{ item.name }}"
+    namespace: "{{ item.namespace }}"
+    user: "{{ item.user }}"
+    api_groups: "{{ item.api_groups }}"
+  when: item.action == "create"
+  loop: "{{ m7s_rbac_cluster_role }}"
 
 - name: Create a k8s Cluster Role Binding
   k8s:
     state: present
     definition: "{{ lookup('template', role_path + '/templates/clusterrole-binding-k8s.yaml.j2') }}"
+  vars:
+    role: "{{ item.name }}"
+    namespace: "{{ item.namespace }}"
+    user: "{{ item.user }}"
+  when: item.action == "create"
+  loop: "{{ m7s_rbac_cluster_role }}"

@@ -10,7 +10,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ user_to_cluster_role }}"
+  loop: "{{ m7s_user_to_cluster_role }}"
 
   #- name: Delete a k8s cluster role 
   #  k8s:
@@ -28,4 +28,4 @@
     kind: ClusterRoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ user_to_cluster_role }}"
+  loop: "{{ m7s_user_to_cluster_role }}"

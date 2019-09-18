@@ -10,7 +10,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
+  loop: "{{ m7s_rbac_role }}"
 
   # El rol deberia eliminarse a mano, por cuestiones de seguridad, ya que podria haber otros usuarios asociados al mismo
   #- name: Delete a k8s role 
@@ -31,5 +31,4 @@
     kind: RoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ k8s_rbac_role }}"
-
+  loop: "{{ m7s_rbac_role }}"
