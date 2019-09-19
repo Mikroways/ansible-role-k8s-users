@@ -2,73 +2,16 @@
 # defaults file for geroafonso.k8s_users
 m7s_users_enabled: false
 
-m7s_rbac_cluster_role: 
-  - name: test-cluster-role
-    user: cluster-role-user 
-    namespace: default
-    action: create
-    api_groups:
-      - name:
-          - ""
-          - "extensions"
-          - "apps"
-          - "batch"
-        resources: 
-          - "*"
-        verbs:
-          - "*"
+m7s_rbac_cluster_role: {}
 
-m7s_rbac_role:
-  - name: admin-role-for-jenkins
-    namespace: jenkins-test
-    action: create
-    user: jenkins-user-admin
-    api_groups:
-      - name:
-          - ""
-          - "extensions"
-          - "apps"
-          - "batch"
-        resources: 
-          - "*"
-        verbs:
-          - "*"
+m7s_rbac_role: {}
 
 # Cluster scope
-m7s_user_to_cluster_role:
-  - user: prueba-admin
-    cluster_role: cluster-admin
-    action: create 
-    namespace: kube-system 
-  - user: prueba-view
-    cluster_role: view
-    action: create 
-    namespace: kube-system 
+m7s_user_to_cluster_role: {}
 
 # Namespace scope
-m7s_user_to_role:
-  - user: user-admin-test-view-ns
-    role: view
-    action: create
-    namespace: jenkins
-  - user: user-admin-test-edit-ns
-    role: edit
-    action: create
-    namespace: jenkins    
-  - user: user-admin-test-ns
-    role: admin
-    action: create
-    namespace: jenkins
+m7s_user_to_role: {}
 
+m7s_allowed_cluster_roles: {}
 
-m7s_allowed_cluster_roles:
-  - cluster-admin
-  - admin
-  - view
-  - edit
-
-m7s_allowed_roles:
-  - cluster-admin
-  - admin
-  - view
-  - edit
+m7s_allowed_roles: {}

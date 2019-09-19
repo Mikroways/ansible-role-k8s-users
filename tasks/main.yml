@@ -6,6 +6,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_user_to_cluster_role is defined
+  - m7s_user_to_cluster_role|length > 0
 
 # Add user to role
 - name: Add User to Role
@@ -13,6 +14,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_user_to_role is defined
+  - m7s_user_to_role|length > 0
 
 # Create custom cluster role and add user
 - name: Create custom cluster role #Cluster scope
@@ -20,6 +22,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_rbac_cluster_role is defined 
+  - m7s_rbac_cluster_role|length > 0
 
 # Create custom role and add user
 - name: Create custom role #Namespace scope
@@ -27,6 +30,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_rbac_role is defined
+  - m7s_rbac_role|length > 0
 
 # Delete custom user role
 - name: Delete custom user roles
@@ -34,6 +38,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_rbac_role is defined
+  - m7s_rbac_role|length > 0
 
 # Delete custom cluster role
 - name: Delete custom cluster roles
@@ -41,6 +46,7 @@
   when: 
   - m7s_users_enabled == true
   - m7s_rbac_cluster_role is defined 
+  - m7s_rbac_cluster_role|length > 0
 
 # Delete only the role binding for user
 - name: Delete user roles
@@ -48,6 +54,7 @@
   when:
   - m7s_users_enabled == true 
   - m7s_user_to_role is defined
+  - m7s_user_to_role|length > 0
 
 # Delete only the cluster role biniding for user
 - name: Delete cluster roles
@@ -55,6 +62,7 @@
   when:
   - m7s_users_enabled == true
   - m7s_user_to_cluster_role is defined
+  - m7s_user_to_cluster_role|length > 0
 
 # Generate kubeconfig file for roles/clusterRoles created  
 - name: Generate kubeconfig files
