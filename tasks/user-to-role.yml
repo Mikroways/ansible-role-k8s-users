@@ -10,7 +10,7 @@
 - name: Check for Role type
   fail: 
     msg: "Valores permitidos para la variable user_to_role.role: {{ m7s_allowed_roles | join(', ') }}"
-  when: item.role not in allowed_roles
+  when: item.role not in m7s_allowed_roles
   loop: "{{ m7s_user_to_role }}"
 
 - name: Check if User is defined
