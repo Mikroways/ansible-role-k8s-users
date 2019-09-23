@@ -7,11 +7,11 @@ m7s_rbac_cluster_role: {}
 m7s_rbac_role: {}
 
 # Cluster scope
-m7s_user_to_cluster_role: {}
+m7s_user_to_cluster_role: []
 
 # Namespace scope
-m7s_user_to_role: {}
+m7s_user_to_role: []
 
-m7s_allowed_cluster_roles: {}
+m7s_allowed_cluster_roles: []
 
-m7s_allowed_roles: {}
+m7s_allowed_roles: []
