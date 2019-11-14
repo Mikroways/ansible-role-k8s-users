@@ -139,7 +139,7 @@ passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: mikroways.k8s-users, x: 42 }
+         - { role: mikroways.m7s_users, x: 42 }
 
 License
 -------
