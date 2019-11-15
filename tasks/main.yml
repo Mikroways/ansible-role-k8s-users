@@ -4,68 +4,68 @@
 - name: Add User to ClusterRole
   include_tasks: user-to-cluster-role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_user_to_cluster_role is defined
-  - m7s_user_to_cluster_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_user_to_cluster_role is defined
+  - m7s_k8s_user_to_cluster_role|length > 0
 
 # Add user to role
 - name: Add User to Role
   include_tasks: user-to-role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_user_to_role is defined
-  - m7s_user_to_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_user_to_role is defined
+  - m7s_k8s_user_to_role|length > 0
 
 # Create custom cluster role and add user
 - name: Create custom cluster role #Cluster scope
   include_tasks: cluster-role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_rbac_cluster_role is defined 
-  - m7s_rbac_cluster_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_rbac_cluster_role is defined 
+  - m7s_k8s_rbac_cluster_role|length > 0
 
 # Create custom role and add user
 - name: Create custom role #Namespace scope
   include_tasks: role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_rbac_role is defined
-  - m7s_rbac_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_rbac_role is defined
+  - m7s_k8s_rbac_role|length > 0
 
 # Delete custom user role
 - name: Delete custom user roles
   include_tasks: delete-custom-role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_rbac_role is defined
-  - m7s_rbac_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_rbac_role is defined
+  - m7s_k8s_rbac_role|length > 0
 
 # Delete custom cluster role
 - name: Delete custom cluster roles
   include_tasks: delete-custom-cluster-role.yml
   when: 
-  - m7s_users_enabled == true
-  - m7s_rbac_cluster_role is defined 
-  - m7s_rbac_cluster_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_rbac_cluster_role is defined 
+  - m7s_k8s_rbac_cluster_role|length > 0
 
 # Delete only the role binding for user
 - name: Delete user roles
   include_tasks: delete-user-role.yml
   when:
-  - m7s_users_enabled == true 
-  - m7s_user_to_role is defined
-  - m7s_user_to_role|length > 0
+  - m7s_k8s_users_enabled == true 
+  - m7s_k8s_user_to_role is defined
+  - m7s_k8s_user_to_role|length > 0
 
 # Delete only the cluster role biniding for user
 - name: Delete cluster roles
   include_tasks: delete-cluster-role.yml
   when:
-  - m7s_users_enabled == true
-  - m7s_user_to_cluster_role is defined
-  - m7s_user_to_cluster_role|length > 0
+  - m7s_k8s_users_enabled == true
+  - m7s_k8s_user_to_cluster_role is defined
+  - m7s_k8s_user_to_cluster_role|length > 0
 
 # Generate kubeconfig file for roles/clusterRoles created  
 - name: Generate kubeconfig files
   include_tasks: kubeconfig-cluster-role.yml
   when:
-  - m7s_users_enabled == true
+  - m7s_k8s_users_enabled == true

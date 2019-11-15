@@ -3,21 +3,21 @@
 
 - name: Check if Role is defined
   fail:
-    msg: "Se debe especificar el ClusterRole existente mediante la variable 'm7s_user_to_role.role'."
+    msg: "Se debe especificar el ClusterRole existente mediante la variable 'm7s_k8s_user_to_role.role'."
   when: item.role is not defined
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: Check for Role type
   fail: 
-    msg: "Valores permitidos para la variable user_to_role.role: {{ m7s_allowed_roles | join(', ') }}"
-  when: item.role not in m7s_allowed_roles
-  loop: "{{ m7s_user_to_role }}"
+    msg: "Valores permitidos para la variable user_to_role.role: {{ m7s_k8s_allowed_roles | join(', ') }}"
+  when: item.role not in m7s_k8s_allowed_roles
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: Check if User is defined
   fail:
-    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'm7s_user_to_role.user'."
+    msg: "Se debe especificar el usuario a agregar a el ClusterRole existente mediante la variable 'm7s_k8s_user_to_role.user'."
   when: item.user is not defined
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: Create namespace
   k8s:
@@ -27,7 +27,7 @@
     kind: Namespace
     api_version: v1
   when: item.action == "create"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: Create a service account
   k8s:
@@ -37,7 +37,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "create"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: User binding to Role
   k8s:
@@ -48,4 +48,4 @@
     namespace: "{{ item.namespace }}"
     user: "{{ item.user }}"
   when: item.action == "create"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"

@@ -10,7 +10,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
   # El rol deberia eliminarse a mano, por cuestiones de seguridad, ya que podria haber otros usuarios asociados al mismo
   #- name: Delete a k8s role 
@@ -31,11 +31,11 @@
     kind: RoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"
 
 - name: Delete folder with kubeconfig files
   file:
     path: /opt/kubernetes/{{ item.user }}
     state: absent
   when: item.action == "delete"
-  loop: "{{ m7s_user_to_role }}"
+  loop: "{{ m7s_k8s_user_to_role }}"

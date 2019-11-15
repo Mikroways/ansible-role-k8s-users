@@ -10,7 +10,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "delete"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"
 
   #- name: Delete a k8s cluster role 
   #  k8s:
@@ -28,11 +28,11 @@
     kind: ClusterRoleBinding
     api_version: v1
   when: item.action == "delete"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"
 
 - name: Delete folder with kubeconfig files
   file:
     path: /opt/kubernetes/{{ item.user }}
     state: absent
   when: item.action == "delete"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"

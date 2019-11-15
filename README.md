@@ -14,14 +14,14 @@ Role Variables
 --------------
 
 Por defecto el rol se encuentra deshabilitado:
-* m7s_users_enabled: false
+* m7s_k8s_users_enabled: false
 
 Setear esta varaible a *true* para poder agregar/eliminar usuarios.
 
 * Para crear un usuario setear la variable action con el valor *create*.
 * Para eliminar un usuario setear la variable action con el valor *delete*.
 
-Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_user_to_cluster_role*. El alcance de esta sera a todo el cluster.
+Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_k8s_user_to_cluster_role*. El alcance de esta sera a todo el cluster.
 
 ClusterRoles permitidos:
 * cluster-admin
@@ -33,7 +33,7 @@ Ejemplo:
 
 ```yaml
 #Cluster scope
-m7s_user_to_cluster_role:
+m7s_k8s_user_to_cluster_role:
   - user: prueba-admin
     cluster_role: cluster-admin
     action: create
@@ -44,7 +44,7 @@ m7s_user_to_cluster_role:
     namespace: kube-system
 ```
 
-Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_user_to_cluster_role*. El alcance de este sera solo al namespace indicado.
+Añadir un usuario a un ClusterRole existente definiendo la variable *m7s_k8s_user_to_cluster_role*. El alcance de este sera solo al namespace indicado.
 
 ClusterRoles permitidos:
 * cluster-admin
@@ -56,7 +56,7 @@ Ejemplo:
 
 ```yaml
 # Namespace scope
-m7s_user_to_role:
+m7s_k8s_user_to_role:
   - user: user-admin-test-view-ns
     role: view
     action: create
@@ -74,7 +74,7 @@ m7s_user_to_role:
 Crear custom Cluster roles:
 
 ```yaml
-m7s_rbac_cluster_role:
+m7s_k8s_rbac_cluster_role:
   - name: test-cluster-role
     user: cluster-role-user
     namespace: default
@@ -92,7 +92,7 @@ m7s_rbac_cluster_role:
 
 Crear custom Roles:
 ```yaml
-m7s_rbac_role:
+m7s_k8s_rbac_role:
   - name: test-role
     namespace: testing
     user: test-r
@@ -139,7 +139,7 @@ passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: mikroways.m7s_users, x: 42 }
+         - { role: mikroways.m7s_k8s_users, x: 42 }
 
 License
 -------

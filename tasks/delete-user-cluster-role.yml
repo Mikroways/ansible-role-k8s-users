@@ -35,4 +35,4 @@
     path: /opt/kubernetes/{{ item.user }}
     state: absent
   when: item.action == "delete"
-  loop: "{{ m7s_user_to_cluster_role }}"
+  loop: "{{ m7s_k8s_user_to_cluster_role }}"

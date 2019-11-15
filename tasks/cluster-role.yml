@@ -9,7 +9,7 @@
     api_version: v1
     kind: ServiceAccount
   when: item.action == "create"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"
 
 - name: Create a k8s Cluster Role
   k8s:
@@ -21,7 +21,7 @@
     user: "{{ item.user }}"
     api_groups: "{{ item.api_groups }}"
   when: item.action == "create"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"
 
 - name: Create a k8s Cluster Role Binding
   k8s:
@@ -32,4 +32,4 @@
     namespace: "{{ item.namespace }}"
     user: "{{ item.user }}"
   when: item.action == "create"
-  loop: "{{ m7s_rbac_cluster_role }}"
+  loop: "{{ m7s_k8s_rbac_cluster_role }}"
