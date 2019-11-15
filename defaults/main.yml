@@ -1,5 +1,4 @@
 ---
-# defaults file for geroafonso.k8s_users
 m7s_k8s_users_enabled: false
 
 m7s_k8s_rbac_cluster_role: {}
