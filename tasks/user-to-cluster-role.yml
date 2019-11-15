@@ -9,7 +9,7 @@
 
 - name: Check if ClusterRole is defined
   fail: 
-    msg: "Valores permitidos para la variable m7s_k8s_user_to_cluster_role.cluster_role: {{ m7s_allowed_cluster_roles | join(', ') }}"
+    msg: "Valores permitidos para la variable m7s_k8s_user_to_cluster_role.cluster_role: {{ m7s_k8s_allowed_cluster_roles | join(', ') }}"
   when: item.cluster_role not in m7s_k8s_allowed_cluster_roles
   loop: "{{ m7s_k8s_user_to_cluster_role }}"
 
